@@ -1,26 +1,17 @@
-# Dockerfile (Clean Final)
+# Use an official Python runtime as a parent image
+FROM python:3.10-slim
 
-# Use an official lightweight Python image
-FROM python:3.11-slim
-
-# Set working directory
+# Set the working directory in the container
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    git \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
-
-# Copy app files
+# Copy the current directory contents into the container at /app
 COPY . /app
 
-# Install Python dependencies
-RUN pip install --upgrade pip
-RUN pip install -r requirements.txt
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose the port Gradio will run on
-EXPOSE 7860
+# Make port 8501 available to the world outside this container
+EXPOSE 8501
 
-# Run the application
-CMD ["python", "app.py"]
+# Run streamlit when the container launches
+CMD ["streamlit", "run", "app.py"]
